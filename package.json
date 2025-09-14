@@ -2,7 +2,7 @@
   "name": "escort-agency",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://WEBCAST-COM.github.io/Escort-Agency-Website-tailwind-React",
+  "homepage": "https://webcast-com.github.io/Escort-Agency-Website-tailwind-React",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
