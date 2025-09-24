@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "updatedAt": "2025-09-24T00:00:00.000Z",
+  "posts": [
+    {
+      "id": "welcome-elyse",
+      "title": "Welcome to Elyse Agency",
+      "slug": "welcome-to-elyse-agency",
+      "excerpt": "Introducing our refined companion experiences across Kenya.",
+      "content": "We are delighted to present a curated selection of verified companions offering discreet, professional experiences across Nairobi, Mombasa, and Nakuru.",
+      "author": { "name": "Admin" },
+      "image": "https://images.unsplash.com/photo-1534081333815-ae5019106622?auto=format&fit=crop&w=1600&q=80",
+      "tags": ["announcement"],
+      "published": true,
+      "date": "2025-09-24T00:00:00.000Z",
+      "updated": "2025-09-24T00:00:00.000Z"
+    },
+    {
+      "id": "new-profiles-september",
+      "title": "New Profiles This Month",
+      "slug": "new-profiles-september",
+      "excerpt": "Fresh additions across Nairobi and Mombasa.",
+      "content": "Explore our latest verified profiles with diverse interests, flexible schedules, and transparent rates. Use the filters to discover the right match for your next event or dinner.",
+      "author": { "name": "Editorial" },
+      "image": "https://images.unsplash.com/photo-1503342394123-480259ab9b86?auto=format&fit=crop&w=1600&q=80",
+      "tags": ["updates", "profiles"],
+      "published": true,
+      "date": "2025-09-20T00:00:00.000Z",
+      "updated": "2025-09-22T00:00:00.000Z"
+    }
+  ]
+}
