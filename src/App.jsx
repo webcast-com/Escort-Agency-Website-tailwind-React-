@@ -51,6 +51,9 @@ export default function EscortAgencyTemplate() {
   const [bookErrors, setBookErrors] = useState({});
   const [subscribed, setSubscribed] = useState(false);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [posts, setPosts] = useState([]);
+  const [postsLoading, setPostsLoading] = useState(true);
+  const [postsError, setPostsError] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -75,6 +78,29 @@ export default function EscortAgencyTemplate() {
     const handleScroll = () => setShowTop(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/post.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const raw = Array.isArray(data) ? data : Array.isArray(data.posts) ? data.posts : [];
+        const list = raw
+          .filter((p) => p && (p.published !== false))
+          .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        if (isMounted) setPosts(list);
+      } catch (e) {
+        if (isMounted) setPostsError("Failed to load updates.");
+      } finally {
+        if (isMounted) setPostsLoading(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   function openProfile(p) {
@@ -306,6 +332,53 @@ export default function EscortAgencyTemplate() {
               >
                 Load More
               </motion.button>
+            </div>
+          )}
+        </section>
+
+        <section className="mt-12">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-purple-700">Updates</h2>
+            <p className="text-sm text-gray-600">{posts.length} posts</p>
+          </div>
+
+          {postsLoading && <p className="text-sm text-gray-500">Loading updates…</p>}
+          {postsError && <p className="text-sm text-red-600">{postsError}</p>}
+
+          {!postsLoading && !postsError && (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => {
+                const dateStr = post?.date ? new Date(post.date).toLocaleDateString() : null;
+                return (
+                  <motion.article
+                    key={post.id || post.slug}
+                    whileHover={{ scale: 1.03, boxShadow: "0px 12px 30px rgba(0,0,0,0.12)" }}
+                    transition={{ type: "spring", stiffness: 220 }}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden border border-pink-100"
+                  >
+                    {post.image && (
+                      <img src={post.image} alt={post.title || "Post image"} className="w-full h-40 object-cover" />
+                    )}
+                    <div className="p-4">
+                      <div className="flex items-start justify-between">
+                        <h3 className="text-lg font-bold text-pink-700 line-clamp-1">{post.title}</h3>
+                        {dateStr && <div className="text-xs text-gray-500">{dateStr}</div>}
+                      </div>
+                      {post.excerpt && <p className="mt-2 text-sm text-gray-700 line-clamp-3">{post.excerpt}</p>}
+
+                      {Array.isArray(post.tags) && post.tags.length > 0 && (
+                        <div className="mt-3 flex gap-2 flex-wrap">
+                          {post.tags.map((t) => (
+                            <span key={t} className="text-xs px-2 py-1 rounded-full bg-pink-50 text-pink-700 border border-pink-200">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </motion.article>
+                );
+              })}
             </div>
           )}
         </section>
